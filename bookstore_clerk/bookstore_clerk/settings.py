@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +27,36 @@ SECRET_KEY = 'django-insecure-2$a&-6hu*vlohzc_!i#l0qe!2k&gbej$6qe@!q3w*p%fr2uv%(
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTH_USER_MODEL = 'api.User'
+REST_FRAMEWORK = {
+  
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',  # Replace with your frontend's URL
+]
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 
 
 # Application definition
@@ -37,6 +68,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "rest_framework",
+    "corsheaders",
+    "api",
+    'drf_yasg',
+    "rest_framework_swagger",
 ]
 
 MIDDLEWARE = [
@@ -75,8 +111,12 @@ WSGI_APPLICATION = 'bookstore_clerk.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'bookstore_db',
+        'USER': config('DB_USERNAME', default='molato10'),
+        'PASSWORD': config('DB_PASSWORD', default='09021171Mc@'),
+        'HOST': 'localhost',  # Update to match the service name
+        'PORT': '5432',      # The default PostgreSQL port is 5432.
     }
 }
 
